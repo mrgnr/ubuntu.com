@@ -806,7 +806,6 @@ app.add_url_rule(
     methods=["POST"],
 )
 
-
 # Charmed OpenStack docs
 openstack_docs = Docs(
     parser=DocParser(
