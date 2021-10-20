@@ -6,6 +6,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 import PurchaseModal from "../../../PurchaseModal";
+import BuyButton from "../BuyButton";
 
 const CubePurchase = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -33,10 +34,11 @@ const CubePurchase = () => {
     </div>
   );
   const termsLabel = () => <>I agree to the terms</>;
-  const buyButton = () => <ActionButton>Buy</ActionButton>;
   const product = "CUBE";
   const quantity = 1;
   const preview = "preview";
+
+  console.log("!!! acountId: ", window.accountId);
 
   return (
     <div>
@@ -58,7 +60,7 @@ const CubePurchase = () => {
                 quantity={quantity}
                 closeModal={closeHandler}
                 Summary={summary}
-                BuyButton={buyButton}
+                BuyButton={BuyButton}
               />
             </Modal>
           </Elements>
