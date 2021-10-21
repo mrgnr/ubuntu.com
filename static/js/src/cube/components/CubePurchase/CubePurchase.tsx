@@ -6,9 +6,14 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 import PurchaseModal from "../../../PurchaseModal";
+import Summary from "../Summary";
 import BuyButton from "../BuyButton";
 
-const CubePurchase = () => {
+type Props = {
+  product: string;
+};
+
+const CubePurchase = ({ product }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const closeHandler = () => setModalOpen(false);
 
@@ -26,17 +31,12 @@ const CubePurchase = () => {
     },
   });
 
-  // TODO: replace these
-  const summary = () => (
-    <div>
-      <h3>Summary</h3>
-      <p>CUBE</p>
-    </div>
+  // TODO: link to terms of service
+  const termsLabel = (
+    <>I agree to the terms Certified Ubuntu Engineer (CUBE) service terms</>
   );
-  const termsLabel = () => <>I agree to the terms</>;
-  const product = "CUBE";
+  const summary = () => <Summary product={product} />;
   const quantity = 1;
-  const preview = "preview";
 
   console.log("!!! acountId: ", window.accountId);
 
@@ -54,9 +54,11 @@ const CubePurchase = () => {
               close={closeHandler}
             >
               <PurchaseModal
+                modalTitle="Complete purchase"
+                marketplace="canonical-cube"
                 termsLabel={termsLabel}
+                isFreeTrialApplicable={false}
                 product={product}
-                preview={preview}
                 quantity={quantity}
                 closeModal={closeHandler}
                 Summary={summary}

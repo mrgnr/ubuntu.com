@@ -54,7 +54,7 @@ edx_api = EdxAPI(
 )
 
 
-@advantage_decorator(permission=None, response="html")
+@advantage_decorator(permission='user', response="html")
 def cube_microcerts():
 
     sso_user = user_info(flask.session)

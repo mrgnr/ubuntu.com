@@ -146,7 +146,7 @@ const TableView = () => {
           ]}
         />
       ) : (
-        <CubePurchase />
+        <CubePurchase product={moduleName} />
       )}
     </div>
   );
