@@ -5,15 +5,17 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
+import { BuyButtonProps } from "../../../PurchaseModal/utils/utils";
 import PurchaseModal from "../../../PurchaseModal";
 import Summary from "../Summary";
-import BuyButton from "../BuyButton";
+import CubeBuyButton from "../CubeBuyButton";
 
 type Props = {
   product: string;
+  productListingId: string;
 };
 
-const CubePurchase = ({ product }: Props) => {
+const CubePurchase = ({ product, productListingId }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const closeHandler = () => setModalOpen(false);
 
@@ -37,6 +39,9 @@ const CubePurchase = ({ product }: Props) => {
   );
   const summary = () => <Summary product={product} />;
   const quantity = 1;
+  const buyButton = ({ ...props }: BuyButtonProps) => {
+    return <CubeBuyButton productListingId={productListingId} {...props} />;
+  };
 
   console.log("!!! acountId: ", window.accountId);
 
@@ -62,7 +67,7 @@ const CubePurchase = ({ product }: Props) => {
                 quantity={quantity}
                 closeModal={closeHandler}
                 Summary={summary}
-                BuyButton={BuyButton}
+                BuyButton={buyButton}
               />
             </Modal>
           </Elements>

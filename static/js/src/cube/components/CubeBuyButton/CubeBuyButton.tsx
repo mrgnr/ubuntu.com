@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import { ActionButton } from "@canonical/react-components";
-import { useMutation } from "react-query";
 import * as Sentry from "@sentry/react";
 
 import { BuyButtonProps } from "../../../PurchaseModal/utils/utils";
-import { usePurchase } from "../../hooks/usePurchase";
+import usePurchase from "../../hooks/usePurchase";
+import usePendingPurchase from "../../hooks/usePendingPurchase";
 
-const BuyButton = ({
+export type Props = BuyButtonProps & { productListingId: string };
+
+const CubeBuyButton = ({
   areTermsChecked,
   isUsingFreeTrial,
   setTermsChecked,
   setError,
   setStep,
-}: BuyButtonProps) => {
+  productListingId,
+}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const purchaseMutation = usePurchase();
+  const purchaseMutation = usePurchase(productListingId);
 
   const {
     data: pendingPurchase,
@@ -29,7 +32,7 @@ const BuyButton = ({
     purchaseMutation.mutate(undefined, {
       onSuccess: (data) => {
         //start polling
-        setPendingPurchaseID(data);
+        // TODO: setPendingPurchaseID(data);
       },
       onError: (error) => {
         setIsLoading(false);
@@ -58,6 +61,8 @@ const BuyButton = ({
     });
   };
 
+  console.log("!!! productListingId: ", productListingId);
+
   return (
     <ActionButton
       className="col-small-2 col-medium-2 col-3 u-no-margin"
@@ -73,4 +78,4 @@ const BuyButton = ({
   );
 };
 
-export default BuyButton;
+export default CubeBuyButton;
