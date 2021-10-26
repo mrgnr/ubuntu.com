@@ -22,7 +22,7 @@ const CubeBuyButton = ({
 
   const {
     data: pendingPurchase,
-    setPendingPurchaseID,
+    setPendingPurchaseId,
     error: purchaseError,
   } = usePendingPurchase();
 
@@ -32,7 +32,7 @@ const CubeBuyButton = ({
     purchaseMutation.mutate(undefined, {
       onSuccess: (data) => {
         //start polling
-        // TODO: setPendingPurchaseID(data);
+        setPendingPurchaseId(data);
       },
       onError: (error) => {
         setIsLoading(false);

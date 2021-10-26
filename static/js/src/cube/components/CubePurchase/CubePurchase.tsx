@@ -4,18 +4,17 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-
 import { BuyButtonProps } from "../../../PurchaseModal/utils/utils";
 import PurchaseModal from "../../../PurchaseModal";
 import Summary from "../Summary";
 import CubeBuyButton from "../CubeBuyButton";
 
 type Props = {
-  product: string;
+  productName: string;
   productListingId: string;
 };
 
-const CubePurchase = ({ product, productListingId }: Props) => {
+const CubePurchase = ({ productName, productListingId }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const closeHandler = () => setModalOpen(false);
 
@@ -37,11 +36,16 @@ const CubePurchase = ({ product, productListingId }: Props) => {
   const termsLabel = (
     <>I agree to the terms Certified Ubuntu Engineer (CUBE) service terms</>
   );
-  const summary = () => <Summary product={product} />;
+
+  const summary = () => (
+    <Summary productName={productName} productListingId={productListingId} />
+  );
+
+  const buyButton = ({ ...props }: BuyButtonProps) => (
+    <CubeBuyButton productListingId={productListingId} {...props} />
+  );
+
   const quantity = 1;
-  const buyButton = ({ ...props }: BuyButtonProps) => {
-    return <CubeBuyButton productListingId={productListingId} {...props} />;
-  };
 
   console.log("!!! acountId: ", window.accountId);
 
@@ -63,7 +67,7 @@ const CubePurchase = ({ product, productListingId }: Props) => {
                 marketplace="canonical-cube"
                 termsLabel={termsLabel}
                 isFreeTrialApplicable={false}
-                product={product}
+                product={productName}
                 quantity={quantity}
                 closeModal={closeHandler}
                 Summary={summary}

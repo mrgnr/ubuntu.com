@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useStripe } from "@stripe/react-stripe-js";
-
 import { getPurchase, postInvoiceID } from "../../advantage/api/contracts";
 
 type PurchaseError = Error & { dontRetry: boolean };

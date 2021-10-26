@@ -149,7 +149,7 @@ const TableView = () => {
         />
       ) : (
         <CubePurchase
-          product={moduleName}
+          productName={moduleName}
           productListingId={productListingId}
         />
       )}
