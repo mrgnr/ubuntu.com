@@ -100,17 +100,16 @@
 
 {% elif has_enrollments %}
 
-<section class="p-strip--light is-slanted--top-right is-shallow">
+<div class="p-strip--light is-shallow is-slanted--top-right" style="padding-bottom: 3.75rem">
+  <!-- This is a visual filler between the hero header and the next section -->
+</div>
+
+<section class="p-strip--light is-shallow">
   <div class="row">
-    <div class="col-5" style="margin-top: 3rem;">
+    <div class="col-12">
       <h2>Refresh your knowledge</h2>
       <p><strong>Be prepared for every microcert</strong></p>
-      <p class="u-sv2">Check your baseline understanding of Ubuntu fundamentals and preview the exam experience in a practice environment.</p>
-      {% if has_study_labs %}
-      <a href="{{ study_labs_url }}" class="p-button--positive">Prepare</a>
-      {% else %}
-      <a href="/cube/contact-us" class="p-button--positive cube-access js-invoke-modal">Apply for access</a>
-      {% endif %}
+      <div id="prepare-button-react"></div>
     </div>
   </div>
 </section>

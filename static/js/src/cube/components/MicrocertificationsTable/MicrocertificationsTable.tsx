@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ContextualMenu, MainTable } from "@canonical/react-components";
 import CubePurchase from "../CubePurchase";
 import PrepareButton from "../PrepareButton";
+
+type Props = {
+  modules: Array<Record<string, unknown>>;
+  studyLabs: Record<string, unknown>;
+  isLoading: boolean;
+  error: string;
+};
 
 export enum Status {
   Enrolled = "enrolled",
@@ -21,53 +28,20 @@ const translateStatus = (status: Status) => {
   }[status];
 };
 
-const TableView = () => {
-  const [modules, setModules] = useState([]);
-  const [studyLabs, setStudyLabs] = useState<Record<string, unknown>>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+const copyBadgeUrl = async (badgeUrl: string) => {
+  try {
+    await navigator.clipboard.writeText(badgeUrl);
+  } catch {
+    console.error("Failed to copy data to clipboard");
+  }
+};
 
-  useEffect(() => {
-    const getModules = async () => {
-      try {
-        const queryString = window.location.search;
-        const response = await fetch(`/cube/microcerts.json${queryString}`);
-
-        if (response.status === 200) {
-          const responseJson = await response.json();
-          const { study_labs_listing: studyLabs } = responseJson;
-          let { modules } = responseJson;
-          modules = modules.map((module: Record<string, unknown>) => ({
-            name: module["name"],
-            badgeURL: module["badge-url"],
-            topics: module["topics"],
-            studyLabURL: module["study_lab_url"],
-            takeURL: module["take_url"],
-            status: module["status"],
-            productListingId: module["product_listing_id"],
-          }));
-
-          setModules(modules);
-          setStudyLabs(studyLabs);
-        }
-      } catch {
-        const errorMessage = "An error occurred while loading the microcerts";
-        setError(errorMessage);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getModules();
-  }, []);
-
-  const copyBadgeUrl = async (badgeUrl: string) => {
-    try {
-      await navigator.clipboard.writeText(badgeUrl);
-    } catch {
-      console.error("Failed to copy data to clipboard");
-    }
-  };
-
+const MicrocertificationsTable = ({
+  modules,
+  studyLabs,
+  isLoading,
+  error,
+}: Props) => {
   const renderModuleName = (name: string, topics: Array<string>) => (
     <div>
       <h3 className="p-heading--5 u-no-margin u-no-padding">{name}</h3>
@@ -242,4 +216,4 @@ const TableView = () => {
   );
 };
 
-export default TableView;
+export default MicrocertificationsTable;
