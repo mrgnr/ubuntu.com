@@ -2,21 +2,14 @@ import React from "react";
 import { ContextualMenu, MainTable } from "@canonical/react-components";
 import CubePurchase from "../CubePurchase";
 import PrepareButton from "../PrepareButton";
+import { Module, Status } from "../../types";
 
 type Props = {
-  modules: Array<Record<string, unknown>>;
+  modules: Module[];
   studyLabs: Record<string, unknown>;
   isLoading: boolean;
   error: string;
 };
-
-export enum Status {
-  Enrolled = "enrolled",
-  NotEnrolled = "not-enrolled",
-  Passed = "passed",
-  Failed = "failed",
-  InProgress = "in-progress",
-}
 
 const translateStatus = (status: Status) => {
   return {

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { Module } from "../types";
 
 const useMicrocertsData = () => {
-  const [modules, setModules] = useState([]);
+  const [modules, setModules] = useState<Module[]>([]);
   const [studyLabs, setStudyLabs] = useState<Record<string, unknown>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -16,15 +17,18 @@ const useMicrocertsData = () => {
           const responseJson = await response.json();
           const { study_labs_listing: studyLabs } = responseJson;
           let { modules } = responseJson;
-          modules = modules.map((module: Record<string, unknown>) => ({
-            name: module["name"],
-            badgeURL: module["badge-url"],
-            topics: module["topics"],
-            studyLabURL: module["study_lab_url"],
-            takeURL: module["take_url"],
-            status: module["status"],
-            productListingId: module["product_listing_id"],
-          }));
+          modules = modules.map((module: Record<string, unknown>) => {
+            console.log("\t\tmodule: ", module["name"]);
+            return {
+              name: module["name"],
+              badgeURL: module["badge-url"],
+              topics: module["topics"],
+              studyLabURL: module["study_lab_url"],
+              takeURL: module["take_url"],
+              status: module["status"],
+              productListingId: module["product_listing_id"],
+            };
+          });
 
           setModules(modules);
           setStudyLabs(studyLabs);
