@@ -412,6 +412,9 @@ def cred_schedule(
     **kwargs,
 ):
     error = None
+    now = datetime.utcnow()
+    min_date = (now + timedelta(days=1)).strftime("%Y-%m-%d")
+    max_date = (now + timedelta(days=7)).strftime("%Y-%m-%d")
 
     if flask.request.method == "POST":
         data = flask.request.form
@@ -425,7 +428,9 @@ def cred_schedule(
         email = sso_user["email"]
         first_name, last_name = sso_user["fullname"].rsplit(" ", maxsplit=1)
         starts_at = datetime.strptime(date_and_time, "%Y-%m-%dT%H:%M%z")
-        print(starts_at,timezone)
+        print(starts_at, timezone)
+
+        ##
         response = trueability_api.post_assessment_reservation(
             ability_screen_id,
             starts_at.isoformat(),
@@ -447,29 +452,67 @@ def cred_schedule(
             return flask.render_template(
                 "/credentialing/schedule-confirm.html", exam=exam
             )
+        ##
 
-    elif flask.request.method=="PATCH":
+        #  exam = {
+        #      "name": "Linux Essentials",
+        #      "date": starts_at.strftime("%d %b %Y"),
+        #      "time": starts_at.strftime("%H:%M"),
+        #  }
+        #
+        #  return flask.render_template(
+        #      "/credentialing/schedule-confirm.html", exam=exam
+        #  )
+
+        return flask.render_template(
+            "/credentialing/schedule.html", error=error
+        )
+
+    elif flask.request.method == "PATCH":
         data = flask.request.form
         timezone = data["timezone"]
         tz_info = pytz.timezone(timezone)
         date_and_time = f"{data['date']}T{data['time']}{datetime.now(tz_info).strftime('%z')}"
         starts_at = datetime.strptime(date_and_time, "%Y-%m-%dT%H:%M%z")
-        response = trueability_api.patch_assessment_reservation(starts_at,timezone,data["uuid"])
+        response = trueability_api.patch_assessment_reservation(
+            starts_at, timezone, data["uuid"]
+        )
 
     assessment_reservation_uuid = flask.request.args.get("uuid")
     if assessment_reservation_uuid:
-        assessment_reservation = trueability_api.get_assessment_reservation(assessment_reservation_uuid)["assessment_reservation"]
+        assessment_reservation = trueability_api.get_assessment_reservation(
+            assessment_reservation_uuid
+        )["assessment_reservation"]
         time_zone = assessment_reservation["user"]["time_zone"]
         tz_info = pytz.timezone(time_zone)
-        print(datetime.now(tz_info).strftime('%z'))
-        starts_at = datetime.fromisoformat(assessment_reservation["starts_at"][:-1]).replace(tzinfo=pytz.timezone("UTC")).astimezone(tz_info)
+        print(datetime.now(tz_info).strftime("%z"))
+        starts_at = (
+            datetime.fromisoformat(assessment_reservation["starts_at"][:-1])
+            .replace(tzinfo=pytz.timezone("UTC"))
+            .astimezone(tz_info)
+        )
         print(starts_at.tzinfo)
         date = starts_at.date()
         time = starts_at.time()
         print(date, time)
-        return flask.render_template("credentialing/schedule.html", uuid=assessment_reservation_uuid, time_zone = time_zone, date = date, time=time, error=error)
+        return flask.render_template(
+            "credentialing/schedule.html",
+            uuid=assessment_reservation_uuid,
+            time_zone=time_zone,
+            date=date,
+            time=time,
+            min_date=min_date,
+            max_date=max_date,
+            error=error,
+        )
 
-    return flask.render_template("credentialing/schedule.html", error=error)
+    return flask.render_template(
+        "credentialing/schedule.html",
+        date=min_date,
+        min_date=min_date,
+        max_date=max_date,
+        error=error,
+    )
 
 
 @shop_decorator(area="cube", permission="user", response="html")
@@ -498,19 +541,44 @@ def cred_scheduled(
             name = r["ability_screen"]["display_name"]
             timezone = r["user"]["time_zone"]
             tz_info = pytz.timezone(timezone)
-            starts_at = datetime.strptime(r["starts_at"], "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.timezone("UTC")).astimezone(tz_info)
+            starts_at = (
+                datetime.strptime(r["starts_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
+                .replace(tzinfo=pytz.timezone("UTC"))
+                .astimezone(tz_info)
+            )
+
+            actions = []
+
+            if r["state"]:  # == "scheduled":
+                actions.append(
+                    {
+                        "text": "Take exam",
+                        "href": f"/credentialing/exam?id={ r['id'] }",
+                    }
+                )
+
+            if r["state"] == "scheduled":
+                actions.append(
+                    {
+                        "text": "Reschedule",
+                        "href": f"/credentialing/schedule?uuid={ r['uuid'] }",
+                    }
+                )
             exams.append(
                 {
                     "name": name,
                     "date": starts_at.strftime("%d %b %Y"),
-                    "time": starts_at.strftime("%H:%M"),
+                    "time": starts_at.strftime("%H:%M %Z"),
                     "timezone": timezone,
                     "state": r["state"],
-                    "uuid": r["uuid"]
+                    "uuid": r["uuid"],
+                    "actions": actions,
                 }
             )
+
     except Exception as e:
         import traceback
+
         tb = traceback.format_exc()
 
     url = os.getenv("TRUEABILITY_URL", "")
@@ -519,9 +587,10 @@ def cred_scheduled(
     return flask.render_template(
         "credentialing/scheduled.html",
         exams=exams,
-        url=url,
-        key_len=key_len,
-        tb=tb,
+        actions=actions,
+        #  url=url,
+        #  key_len=key_len,
+        #  tb=tb,
     )
 
 

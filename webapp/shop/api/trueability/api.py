@@ -68,10 +68,10 @@ class TrueAbilityAPI:
 
     def update_ability_screen(self):
         pass
-    
+
     def get_assessment_reservation(self, uuid: str = ""):
         uri = f"/api/v1//assessment_reservations/{uuid}"
-        return self.make_request("GET",uri).json()
+        return self.make_request("GET", uri).json()
 
     def get_assessment_reservations(self, ability_screen_id: int = None):
         uri = "/api/v1/assessment_reservations" + (
@@ -114,20 +114,18 @@ class TrueAbilityAPI:
         }
         return self.make_request("POST", uri, json=body).json()
 
-    def patch_assessment_reservation(self,starts_at:str,timezone: str, uuid:str):
+    def patch_assessment_reservation(
+        self, starts_at: str, timezone: str, uuid: str
+    ):
         uri = f"/api/v1/assessment_reservations/{uuid}"
         body = {
             "assessment_reservation": {
-                "starts_at":starts_at,
-                "address_attributes":{
-                    "time_zone":timezone
-                },
-                "user":{
-                    "time_zone": timezone
-                }
+                "starts_at": starts_at,
+                "address_attributes": {"time_zone": timezone},
+                "user": {"time_zone": timezone},
             }
         }
-        return self.make_request("PATCH",uri, json=body).json()
+        return self.make_request("PATCH", uri, json=body).json()
 
     def get_assessments(self, ability_screen_id: int = None, uuid: str = None):
         uri = (
@@ -228,6 +226,29 @@ if __name__ == "__main__":
     #  ability_screen_id = 4190
     #  print(json.dumps(api.get_assessment_reservations(ability_screen_id), indent=4))
     #  print()
+
+    #  print("# Assessment reservations")
+    #  ability_screen_id = 4190
+    #  response = api.get_assessment_reservations(ability_screen_id)
+    #  for r in response["assessment_reservations"]:
+    #      print(f"starts_at: {r['starts_at']}")
+    #      print(f"email: {r['user']['email']}")
+    #      print(f"timezone: {r['user']['time_zone']}")
+    #      print()
+
+    print("# Create assessment reservation")
+    ability_screen_id = 4190
+    starts_at = "2022-09-12T12:00"
+    response = api.post_assessment_reservation(
+        ability_screen_id,
+        starts_at,
+        "morgan.robertson@canonical.com",
+        "Morgan",
+        "Robertson",
+        "Europe/Berlin",
+    )
+    print(json.dumps(response, indent=4))
+    print()
 
     #  print("# Assessments")
     #  ability_screen_id = 4190
