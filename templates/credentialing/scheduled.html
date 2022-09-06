@@ -31,7 +31,7 @@
         <tr>
           <td>{{ exam["name"] }}</td>
           <td>{{ exam["state"] | capitalize }}</td>
-          <td>{{ exam["date"] }} at {{ exam["time"] }}</td>
+          <td>{{ exam["date"] }}<br />{{ exam["time"] }}</td>
           <td>
             {% for action in exam["actions"] %}
               <a href="{{ action['href'] }}">{{ action['text']}}</a></br>
