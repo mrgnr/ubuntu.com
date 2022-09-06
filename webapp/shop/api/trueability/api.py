@@ -128,7 +128,6 @@ class TrueAbilityAPI:
             },
             "user": {"time_zone": timezone},
         }
-        print("body: ", body)
         return self.make_request("PATCH", uri, json=body).json()
 
     def get_assessments(self, ability_screen_id: int = None, uuid: str = None):

@@ -443,6 +443,7 @@ def cred_schedule(
                 "name": "Linux Essentials",
                 "date": starts_at.strftime("%d %b %Y"),
                 "time": starts_at.strftime("%H:%M %Z"),
+                "uuid": data["uuid"] if "uuid" in data  else ""
             }
             return flask.render_template(
                 "/credentialing/schedule-confirm.html", exam=exam
@@ -510,17 +511,18 @@ def cred_scheduled(
                 .replace(tzinfo=pytz.timezone("UTC"))
                 .astimezone(tz_info)
             )
+            assessment_id = r.get("assessment") and r["assessment"]["id"]
 
             actions = []
             utc = pytz.timezone("UTC")
             now = utc.localize(datetime.utcnow())
-            end = starts_at + timedelta(hours=4)
+            end = starts_at + timedelta(hours=6)
 
-            if now > starts_at and now < end:
+            if assessment_id and now > starts_at and now < end:
                 actions.append(
                     {
                         "text": "Take exam",
-                        "href": f"/credentialing/exam?id={ r['id'] }",
+                        "href": f"/credentialing/exam?id={ assessment_id }",
                     }
                 )
 
@@ -554,7 +556,6 @@ def cred_scheduled(
     return flask.render_template(
         "credentialing/scheduled.html",
         exams=exams,
-        actions=actions,
         #  url=url,
         #  key_len=key_len,
         #  tb=tb,
