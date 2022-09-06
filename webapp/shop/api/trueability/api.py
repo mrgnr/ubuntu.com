@@ -121,10 +121,14 @@ class TrueAbilityAPI:
         body = {
             "assessment_reservation": {
                 "starts_at": starts_at,
-                "address_attributes": {"time_zone": timezone},
-                "user": {"time_zone": timezone},
-            }
+                "address_attributes": {
+                    "country_code": "US",
+                    "time_zone": timezone,
+                },
+            },
+            "user": {"time_zone": timezone},
         }
+        print("body: ", body)
         return self.make_request("PATCH", uri, json=body).json()
 
     def get_assessments(self, ability_screen_id: int = None, uuid: str = None):
@@ -236,16 +240,25 @@ if __name__ == "__main__":
     #      print(f"timezone: {r['user']['time_zone']}")
     #      print()
 
-    print("# Create assessment reservation")
-    ability_screen_id = 4190
-    starts_at = "2022-09-12T12:00"
-    response = api.post_assessment_reservation(
-        ability_screen_id,
-        starts_at,
-        "morgan.robertson@canonical.com",
-        "Morgan",
-        "Robertson",
-        "Europe/Berlin",
+    #  print("# Create assessment reservation")
+    #  ability_screen_id = 4190
+    #  starts_at = "2022-09-12T12:00"
+    #  response = api.post_assessment_reservation(
+    #      ability_screen_id,
+    #      starts_at,
+    #      "morgan.robertson@canonical.com",
+    #      "Morgan",
+    #      "Robertson",
+    #      "Europe/Berlin",
+    #  )
+    #  print(json.dumps(response, indent=4))
+    #  print()
+
+    print("# Change assessment reservation")
+    response = api.patch_assessment_reservation(
+        starts_at="2022-09-08T06:00",
+        timezone="Europe/Berlin",
+        uuid="e5dca5fc-82ae-4d1f-bc3e-c0a9988128b2",
     )
     print(json.dumps(response, indent=4))
     print()
