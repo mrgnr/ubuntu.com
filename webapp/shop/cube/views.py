@@ -482,7 +482,7 @@ def cred_schedule(
 
 @shop_decorator(area="cube", permission="user", response="html")
 @canonical_staff()
-def cred_scheduled(
+def cred_your_exams(
     ua_contracts_api,
     badgr_issuer,
     badgr_api,
@@ -554,7 +554,7 @@ def cred_scheduled(
     key_len = len(os.getenv("TRUEABILITY_API_KEY", ""))
 
     return flask.render_template(
-        "credentialing/scheduled.html",
+        "credentialing/your-exams.html",
         exams=exams,
         #  url=url,
         #  key_len=key_len,
