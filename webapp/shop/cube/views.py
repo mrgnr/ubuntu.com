@@ -411,7 +411,9 @@ def cred_schedule(
         timezone = data["timezone"]
         tz_info = pytz.timezone(timezone)
         scheduled_time = f"{data['date']}T{data['time']}"
-        starts_at = tz_info.localize(datetime.strptime(scheduled_time, "%Y-%m-%dT%H:%M"))
+        starts_at = tz_info.localize(
+            datetime.strptime(scheduled_time, "%Y-%m-%dT%H:%M")
+        )
         ability_screen_id = 4190
         email = sso_user["email"]
         first_name, last_name = sso_user["fullname"].rsplit(" ", maxsplit=1)
@@ -524,6 +526,7 @@ def cred_your_exams(
                         {
                             "text": "Take exam",
                             "href": f"/credentialing/exam?id={ assessment_id }",
+                            "button_class": "p-button--positive",
                         }
                     ]
                 )
@@ -534,10 +537,12 @@ def cred_your_exams(
                         {
                             "text": "Reschedule",
                             "href": f"/credentialing/schedule?uuid={ r['uuid'] }",
+                            "button_class": "p-button",
                         },
                         {
                             "text": "Cancel",
                             "href": f"/credentialing/cancel-exam?uuid={ r['uuid'] }",
+                            "button_class": "p-button--negative",
                         },
                     ]
                 )
