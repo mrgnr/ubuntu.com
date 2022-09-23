@@ -1,3 +1,5 @@
+import setupIntlTelInput from "./intlTelInput.js";
+
 (function () {
   document.addEventListener("DOMContentLoaded", function () {
     var triggeringHash = "#get-in-touch";
@@ -5,6 +7,7 @@
     var contactButtons = document.querySelectorAll(".js-invoke-modal");
     const contactForm = document.getElementById("contact-form-container");
     const returnData = window.location.pathname + "#success";
+    const contactModalSelector = "contact-modal";
 
     contactButtons.forEach(function (contactButton) {
       contactButton.addEventListener("click", function (e) {
@@ -175,7 +178,7 @@
 
     function initialiseForm() {
       var contactIndex = 1;
-      var contactModal = document.getElementById("contact-modal");
+      const contactModal = document.getElementById(contactModalSelector);
       var closeModal = document.querySelector(".p-modal__close");
       var closeModalButton = document.querySelector(".js-close");
       var modalPaginationButtons = contactModal.querySelectorAll(
@@ -185,6 +188,7 @@
       var submitButton = contactModal.querySelector(".mktoButton");
       var comment = contactModal.querySelector("#Comments_from_lead__c");
       var otherContainers = document.querySelectorAll(".js-other-container");
+      var phoneInput = document.querySelector("#phone");
 
       document.onkeydown = function (evt) {
         evt = evt || window.event;
@@ -220,8 +224,12 @@
       }
 
       if (contactModal) {
-        contactModal.addEventListener("click", function (e) {
-          if (e.target.id == "contact-modal") {
+        let isClickStartedInside = false;
+        contactModal.addEventListener("mousedown", function (e) {
+          isClickStartedInside = e.target.id !== contactModalSelector;
+        });
+        contactModal.addEventListener("mouseup", function (e) {
+          if (!isClickStartedInside && e.target.id === contactModalSelector) {
             e.preventDefault();
             close();
           }
@@ -504,6 +512,9 @@
       }
 
       setCheckboxLimit();
+
+      // Setup dial code dropdown options (intlTelInput.js)
+      setupIntlTelInput(phoneInput);
 
       function fireLoadedEvent() {
         var event = new CustomEvent("contactModalLoaded");
