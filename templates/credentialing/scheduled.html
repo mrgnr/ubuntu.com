@@ -1,0 +1,46 @@
+{% extends "credentialing/base_cube.html" %}
+
+{% block title %}Canonical Credentialing -- Your exams{% endblock %}
+
+{% block meta_description %}The Canonical Ubuntu Essentials exams certify knowledge and verify skills in general Linux, Ubuntu Desktop, and Ubuntu Server topics.{% endblock meta_description %}
+{% block meta_copydoc %}https://docs.google.com/document/d/1QuhO-9FEOGLrYp8bErS_9snqdljl7d6tFAUoNQxoVDQ/edit{% endblock meta_copydoc %}
+
+{% block content %}
+
+<section class="p-strip--suru-topped">
+  <div class="row">
+    <h1>Your exams</h1>
+    <!--h1>TrueAbility URL: {{ url }}</h1-->
+    <!--h1>Key length: {{ key_len }}</h1-->
+    <!--p>Traceback:<br/>{{ tb }}</p-->
+  </div>
+  <div class="row">
+    <table aria-label="Scheduled exams">
+      <thead>
+        <tr>
+          <th>Exam</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for exam in exams %}
+        <tr>
+          <td>{{ exam["name"] }}</td>
+          <td>{{ exam["date"] }}</td>
+          <td>{{ exam["time"] }}</td>
+          <td>{{ exam["state"] }}</td>
+          <td><a href="/credentialing/schedule?uuid={{ exam["uuid"] }}">Reschedule</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <a href="/credentialing/schedule">Schedule a new exam here</a>
+  </div>
+</section>
+
+{% endblock content%}
