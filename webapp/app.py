@@ -903,7 +903,7 @@ core_als_autils_docs = Docs(
 )
 core_als_autils_docs.init_app(app)
 
-# Credentialing
+# Credentialling
 app.add_url_rule("/credentialling", view_func=cube_home)
 app.add_url_rule("/credentialling/self-study", view_func=cred_self_study)
 app.add_url_rule("/credentialling/syllabus", view_func=cred_syllabus_data)
@@ -912,10 +912,10 @@ app.add_url_rule(
     view_func=cred_schedule,
     methods=["GET", "POST"],
 )
-app.add_url_rule("/credentialing/your-exams", view_func=cred_your_exams)
-app.add_url_rule("/credentialing/cancel-exam", view_func=cred_cancel_exam)
-app.add_url_rule("/credentialing/assessments", view_func=cred_assessments)
-app.add_url_rule("/credentialing/exam", view_func=cred_exam)
+app.add_url_rule("/credentialling/your-exams", view_func=cred_your_exams)
+app.add_url_rule("/credentialling/cancel-exam", view_func=cred_cancel_exam)
+app.add_url_rule("/credentialling/assessments", view_func=cred_assessments)
+app.add_url_rule("/credentialling/exam", view_func=cred_exam)
 app.add_url_rule("/cube/microcerts", view_func=cube_microcerts)
 app.add_url_rule("/cube/microcerts.json", view_func=get_microcerts)
 app.add_url_rule(
