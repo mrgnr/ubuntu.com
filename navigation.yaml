@@ -537,6 +537,10 @@ credentialling:
       path: /credentialling/syllabus
     - title: Study guide
       path: /credentialling/self-study
+    - title: Schedule
+      path: /credentialling/schedule
+    - title: Your exams
+      path: /credentialling/your-exams
 
 gcp:
   title: GCP
