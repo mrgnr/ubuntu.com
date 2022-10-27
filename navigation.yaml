@@ -17,6 +17,8 @@ azure:
       path: /azure
     - title: Pro
       path: /azure/pro
+    - title: Support
+      path: /azure/support
     - title: FIPS
       path: /azure/fips
     - title: SQL
@@ -48,6 +50,8 @@ aws:
       path: /aws
     - title: Pro
       path: /aws/pro
+    - title: Support
+      path: /aws/support
     - title: Outposts
       path: /aws/outposts
     - title: FIPS
