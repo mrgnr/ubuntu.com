@@ -541,6 +541,8 @@ credentialling:
       path: /credentialling/schedule
     - title: Your exams
       path: /credentialling/your-exams
+    - title: Content
+      path: /credentialling/content
 
 gcp:
   title: GCP

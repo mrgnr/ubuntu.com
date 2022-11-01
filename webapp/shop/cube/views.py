@@ -674,6 +674,24 @@ def cred_exam(
     return flask.render_template("credentialling/exam.html", url=url)
 
 
+@shop_decorator(area="cube", permission="user", response="html")
+@canonical_staff()
+def cred_content(
+    ua_contracts_api,
+    badgr_issuer,
+    badgr_api,
+    edx_api,
+    trueability_api,
+    badge_certification,
+    **kwargs,
+):
+    if flask.request.method == "POST":
+        data = flask.request.form
+        print("data: ", data)
+
+    return flask.render_template("credentialling/content.html")
+
+
 @shop_decorator(area="cube", permission="user", response="json")
 def cube_study_labs_button(edx_api, **kwargs):
     sso_user = user_info(flask.session)

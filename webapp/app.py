@@ -53,6 +53,7 @@ from webapp.shop.cube.views import (
     cred_cancel_exam,
     cred_assessments,
     cred_exam,
+    cred_content,
     cube_microcerts,
     cube_study_labs_button,
     get_microcerts,
@@ -916,6 +917,11 @@ app.add_url_rule("/credentialling/your-exams", view_func=cred_your_exams)
 app.add_url_rule("/credentialling/cancel-exam", view_func=cred_cancel_exam)
 app.add_url_rule("/credentialling/assessments", view_func=cred_assessments)
 app.add_url_rule("/credentialling/exam", view_func=cred_exam)
+app.add_url_rule(
+    "/credentialling/content",
+    view_func=cred_content,
+    methods=["GET", "POST"],
+)
 app.add_url_rule("/cube/microcerts", view_func=cube_microcerts)
 app.add_url_rule("/cube/microcerts.json", view_func=get_microcerts)
 app.add_url_rule(
